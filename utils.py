@@ -4,7 +4,7 @@ from selenium import webdriver
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.common.by import By
-
+from selenium.common.exceptions import NoSuchElementException
 import csv
 import os
 os.chdir('D:\Tools\workplace\python_work')
@@ -26,6 +26,10 @@ def click_by_xpath(xpath):
     wait_by_xpath(xpath)
     wait.until(EC.presence_of_element_located((By.XPATH, xpath)))
     #wait.until_not(EC.element_to_be_clickable((By.XPATH, xpath)))
+    driver.find_element(By.XPATH, xpath).click()
+
+# 不需要等待的点击事件
+def click_by_xpath_no_wait(xpath):
     driver.find_element(By.XPATH, xpath).click()
 
 # 滑动事件

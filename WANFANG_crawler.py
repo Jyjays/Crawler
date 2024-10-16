@@ -1,4 +1,5 @@
 import utils
+from selenium.common.exceptions import NoSuchElementException
 
 # 初始化WebDriver
 from utils import driver
@@ -68,27 +69,37 @@ year_outer_text = utils.parse_outer_text(year_list)
 category_data = [['期刊论文',0],['会议论文',0]]
 item_data = []
 num = utils.parse_element_count(paper_list)
-for i in range(1,num):
-    category = utils.parse_outer_text(f'/html/body/div[5]/div/div[3]/div[2]/div[2]/div[2]/div[2]/div/div/div[2]/div[1]/div/div[{i}]/div/div[2]/span[1]')
-    if category == '[期刊论文]':
-        category_data[0][1] += 1
-    elif category == '[会议论文]':
-        category_data[1][1] += 1
-    item_count = utils.parse_element_count(f'/html/body/div[5]/div/div[3]/div[2]/div[2]/div[2]/div[2]/div/div/div[2]/div[1]/div/div[{i}]/div/div[4]')
-    if item_count == 0 | item_count == ():
-        continue
-    for j in range(1,item_count+1):
-        item = utils.parse_outer_text(f'/html/body/div[5]/div/div[3]/div[2]/div[2]/div[2]/div[2]/div/div/div[2]/div[1]/div/div[{i}]/div/div[4]/span[{j}]')
-        item_data.append(item)
 
-item_map = []
-for item in item_data:
-    if item in item_map:
-        item_map[item_map.index(item)][1] += 1
-    else:
-        item_map.append((item,1))
-print(item_map)
+while True:
+    for i in range(1,num):
+        category = utils.parse_outer_text(f'/html/body/div[5]/div/div[3]/div[2]/div[2]/div[2]/div[2]/div/div/div[2]/div[1]/div/div[{i}]/div/div[2]/span[1]')
+        if category == '[期刊论文]':
+            category_data[0][1] += 1
+        elif category == '[会议论文]':
+            category_data[1][1] += 1
+        item_count = utils.parse_element_count(f'/html/body/div[5]/div/div[3]/div[2]/div[2]/div[2]/div[2]/div/div/div[2]/div[1]/div/div[{i}]/div/div[4]')
+        if item_count == 0 | item_count == ():
+            continue
+        for j in range(1,item_count+1):
+            item = utils.parse_outer_text(f'/html/body/div[5]/div/div[3]/div[2]/div[2]/div[2]/div[2]/div/div/div[2]/div[1]/div/div[{i}]/div/div[4]/span[{j}]')
+            item_data.append(item)
 
+    item_map = []
+    for item in item_data:
+        if item in item_map:
+            item_map[item_map.index(item)][1] += 1
+        else:
+            item_map.append((item,1))
+    # 如果有下一页则点击下一页
+    try:
+        # 自行填入下一页的xpath
+        # utils.click_by_xpath_no_wait('')
+        # 因为本次爬取没有下一页，所以直接break
+        break
+    except NoSuchElementException:
+        break
+
+print(category_data)
 # 关闭浏览器
 driver.quit()
 
