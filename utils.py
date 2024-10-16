@@ -61,6 +61,11 @@ def parse_outer_text(xpath):
     wait_by_xpath(xpath)
     element = driver.find_element(By.XPATH, xpath)
     return driver.execute_script("return arguments[0].outerText;", element)
+# 解析元素数量
+def parse_element_count(xpath):
+    wait_by_xpath(xpath)
+    element = driver.find_element(By.XPATH, xpath)
+    return driver.execute_script("return arguments[0].childElementCount;", element)
 
 # 按空格分割数据
 def split_by_space(data):
@@ -76,6 +81,9 @@ def split_by_enter(data):
             value = int(line[line.rfind('(')+1:line.rfind(')')])
             res_list.append((keyword, value))
     return res_list
+
+
+
 
 # 写入csv文件
 def write_to_csv(file_name, category_list, res_list):

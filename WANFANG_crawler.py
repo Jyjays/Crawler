@@ -51,12 +51,16 @@ WANFANG_input_third_part('清华大学')
 WANFANG_set_time_range(2014,0)
 #点击搜索
 WANFANG_click_search()
-
-
-
-
-
-
+#/html/body/div[5]/div/div[3]/div[2]/div[2]/div[2]/div[2]/div/div/div[2]/div[1]/div
+# 获取当前页的文章数量
+num = utils.parse_element_count('/html/body/div[5]/div/div[3]/div[2]/div[2]/div[2]/div[2]/div/div/div[2]/div[1]/div')
+for i in range(1,num+1):
+    category = utils.parse_outer_text(f'/html/body/div[5]/div/div[3]/div[2]/div[2]/div[2]/div[2]/div/div/div[2]/div[1]/div/div[{i}]/div/div[2]/span[1]')
+    if category == '[期刊论文]':
+        print('期刊论文')
+    elif category == '[会议论文]':
+        print('会议论文')
+        
 
 # 关闭浏览器
 driver.quit()
