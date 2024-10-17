@@ -4,6 +4,8 @@ from selenium.common.exceptions import NoSuchElementException
 # 初始化WebDriver
 from utils import driver
 
+csv_dir = 'D:/Tools/workplace/python_work/Crawler/'
+
 paper_list = '/html/body/div[5]/div/div[3]/div[2]/div[2]/div[2]/div[2]/div/div/div[2]/div[1]/div'
 
 year_path = '/html/body/div[5]/div/div[3]/div[2]/div[2]/div[2]/div[1]/div/div[2]/div[3]/div[1]/i'
@@ -47,10 +49,10 @@ def WANFANG_set_time_range(time1,time2):
 #  点击搜索
 def WANFANG_click_search():
     utils.click_by_xpath('/html/body/div[5]/div/div[2]/div[2]/div[1]/div[4]/span[1]')
-utils.Init('https://s.wanfangdata.com.cn/advanced-search/paper',driver)
-
-
-
+    
+    
+# 初始化浏览器
+utils.Init('https://s.wanfangdata.com.cn/advanced-search/paper',driver,csv_dir)
 WANFANG_set_class1_author()
 WANFANG_input_second_part('张学工')
 WANFNAG_set_class2_authorhome()
@@ -99,7 +101,16 @@ while True:
     except NoSuchElementException:
         break
 
-print(category_data)
+#print(category_data)
 # 关闭浏览器
+
+res_list = []
+for data in enumerate(category_data):
+    res_list.append(('来源类型', data[0], data[1]))
+for item in item_map:
+    res_list.append(('主题',item[0],item[1]))
+
+utils.write_to_csv('WANFANG.csv',res_list)
+
 driver.quit()
 
