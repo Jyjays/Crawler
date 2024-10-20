@@ -1,3 +1,5 @@
 /grouped_data.csv
 /__pycache__
-/基本信息.csv
+/*.csv
+/*.ttf
+/*.xlsx
